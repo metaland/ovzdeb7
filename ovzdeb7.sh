@@ -24,7 +24,7 @@ sed -i 's/AcceptEnv/#AcceptEnv/g' /etc/ssh/sshd_config
 service ssh restart
 
 # set repo
-wget -O /etc/apt/sources.list "http://vpsscript.hol.es/ovzdeb7/sources.list.debian7"
+wget -O /etc/apt/sources.list "https://raw.githubusercontent.com/metaland/ovzdeb7/master/sources.list.debian7"
 wget "http://www.dotdeb.org/dotdeb.gpg"
 cat dotdeb.gpg | apt-key add -;rm dotdeb.gpg
 
@@ -71,24 +71,24 @@ echo "screenfetch" >> .profile
 cd
 rm /etc/nginx/sites-enabled/default
 rm /etc/nginx/sites-available/default
-wget -O /etc/nginx/nginx.conf "http://vpsscript.hol.es/ovzdeb7/nginx.conf"
+wget -O /etc/nginx/nginx.conf "https://raw.githubusercontent.com/metaland/ovzdeb7/master/nginx.conf"
 mkdir -p /home/vps/public_html
 wget -O /home/vps/public_html/index.html "http://vpsscript.hol.es/index.html"
 echo "<?php phpinfo(); ?>" > /home/vps/public_html/info.php
-wget -O /etc/nginx/conf.d/vps.conf "http://vpsscript.hol.es/ovzdeb7/vps.conf"
+wget -O /etc/nginx/conf.d/vps.conf "https://raw.githubusercontent.com/metaland/ovzdeb7/master/vps.conf"
 sed -i 's/listen = \/var\/run\/php5-fpm.sock/listen = 127.0.0.1:9000/g' /etc/php5/fpm/pool.d/www.conf
 service php5-fpm restart
 service nginx restart
 
 # install openvpn
-wget -O /etc/openvpn/openvpn.tar "http://vpsscript.hol.es/ovzdeb7/openvpn-debian.tar"
+wget -O /etc/openvpn/openvpn.tar "https://raw.githubusercontent.com/metaland/ovzdeb7/master/openvpn-debian.tar"
 cd /etc/openvpn/
 tar xf openvpn.tar
-wget -O /etc/openvpn/1194.conf "http://vpsscript.hol.es/ovzdeb7/1194.conf"
+wget -O /etc/openvpn/1194.conf "https://raw.githubusercontent.com/metaland/ovzdeb7/master/1194.conf"
 service openvpn restart
 sysctl -w net.ipv4.ip_forward=1
 sed -i 's/#net.ipv4.ip_forward=1/net.ipv4.ip_forward=1/g' /etc/sysctl.conf
-wget -O /etc/iptables.up.rules "http://vpsscript.hol.es/ovzdeb7/iptables.up.rules"
+wget -O /etc/iptables.up.rules "https://raw.githubusercontent.com/metaland/ovzdeb7/master/iptables.up.rules"
 sed -i '$ i\iptables-restore < /etc/iptables.up.rules' /etc/rc.local
 sed -i $MYIP2 /etc/iptables.up.rules;
 iptables-restore < /etc/iptables.up.rules
@@ -96,7 +96,7 @@ service openvpn restart
 
 # configure openvpn client config
 cd /etc/openvpn/
-wget -O /etc/openvpn/1194-client.ovpn "http://vpsscript.hol.es/ovzdeb7/1194-client.conf"
+wget -O /etc/openvpn/1194-client.ovpn "https://raw.githubusercontent.com/metaland/ovzdeb7/master/1194.conf"
 sed -i $MYIP2 /etc/openvpn/1194-client.ovpn;
 PASS=`cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 15 | head -n 1`;
 useradd -M -s /bin/false KangArie
@@ -108,17 +108,17 @@ cp client.tar /home/vps/public_html/
 cd
 
 # install badvpn
-wget -O /usr/bin/badvpn-udpgw "http://vpsscript.hol.es/ovzdeb7/badvpn-udpgw"
+wget -O /usr/bin/badvpn-udpgw "https://raw.githubusercontent.com/metaland/ovzdeb7/master/badvpn-udpgw"
 if [ "$OS" == "x86_64" ]; then
-  wget -O /usr/bin/badvpn-udpgw "http://vpsscript.hol.es/ovzdeb7/badvpn-udpgw64"
+  wget -O /usr/bin/badvpn-udpgw "https://raw.githubusercontent.com/metaland/ovzdeb7/master/badvpn-udpgw64"
 fi
 sed -i '$ i\screen -AmdS badvpn badvpn-udpgw --listen-addr 127.0.0.1:7300' /etc/rc.local
 chmod +x /usr/bin/badvpn-udpgw
 screen -AmdS badvpn badvpn-udpgw --listen-addr 127.0.0.1:7300
 
 # install mrtg
-wget -O /etc/snmp/snmpd.conf "http://vpsscript.hol.es/ovzdeb7/snmpd.conf"
-wget -O /root/mrtg-mem.sh "http://vpsscript.hol.es/ovzdeb7/mrtg-mem.sh"
+wget -O /etc/snmp/snmpd.conf "https://raw.githubusercontent.com/metaland/ovzdeb7/master/snmpd.conf"
+wget -O /root/mrtg-mem.sh "https://raw.githubusercontent.com/metaland/ovzdeb7/master/mrtg-mem.sh"
 chmod +x /root/mrtg-mem.sh
 cd /etc/snmp/
 sed -i 's/TRAPDRUN=no/TRAPDRUN=yes/g' /etc/default/snmpd
@@ -126,7 +126,7 @@ service snmpd restart
 snmpwalk -v 1 -c public localhost 1.3.6.1.4.1.2021.10.1.3.1
 mkdir -p /home/vps/public_html/mrtg
 cfgmaker --zero-speed 100000000 --global 'WorkDir: /home/vps/public_html/mrtg' --output /etc/mrtg.cfg public@localhost
-curl "http://vpsscript.hol.es/ovzdeb7/mrtg.conf" >> /etc/mrtg.cfg
+curl "https://raw.githubusercontent.com/metaland/ovzdeb7/master/mrtg.conf" >> /etc/mrtg.cfg
 sed -i 's/WorkDir: \/var\/www\/mrtg/# WorkDir: \/var\/www\/mrtg/g' /etc/mrtg.cfg
 sed -i 's/# Options\[_\]: growright, bits/Options\[_\]: growright/g' /etc/mrtg.cfg
 indexmaker --output=/home/vps/public_html/mrtg/index.html /etc/mrtg.cfg
@@ -169,7 +169,7 @@ apt-get -y install fail2ban;service fail2ban restart
 
 # install squid3
 apt-get -y install squid3
-wget -O /etc/squid3/squid.conf "http://vpsscript.hol.es/ovzdeb7/squid3.conf"
+wget -O /etc/squid3/squid.conf "https://raw.githubusercontent.com/metaland/ovzdeb7/master/squid3.conf"
 sed -i $MYIP2 /etc/squid3/squid.conf;
 service squid3 restart
 
@@ -186,13 +186,11 @@ service vnstat restart
 cd
 curl -L "https://raw.github.com/sivel/speedtest-cli/master/speedtest_cli.py" > speedtest_cli.py
 curl -L "https://raw.github.com/pixelb/ps_mem/master/ps_mem.py" > ps_mem.py
-wget -O bench-network.sh 
-"http://vpsscript.hol.es/ovzdeb7/bench-network.sh"
-wget -O limit.sh 
-"http://vpsscript.hol.es/ovzdeb7/limit.sh"
-curl http://vpsscript.hol.es/ovzdeb7/user-login.sh > user-login.sh
-curl http://vpsscript.hol.es/ovzdeb7/user-expire.sh > user-expire.sh
-curl http://vpsscript.hol.es/ovzdeb7/user-limit.sh > user-limit.sh
+wget -O bench-network.sh "https://raw.githubusercontent.com/metaland/ovzdeb7/master/bench-network.sh"
+wget -O limit.sh "https://raw.githubusercontent.com/metaland/ovzdeb7/master/limit.sh"
+curl https://raw.githubusercontent.com/metaland/ovzdeb7/master/user-login.sh > user-login.sh
+curl https://raw.githubusercontent.com/metaland/ovzdeb7/master/user-expire.sh > user-expire.sh
+curl https://raw.githubusercontent.com/metaland/ovzdeb7/master/user-limit.sh > user-limit.sh
 echo "0 0 * * * root /root/user-expire.sh" > /etc/cron.d/user-expire
 sed -i '$ i\screen -AmdS limit /root/limit.sh' /etc/rc.local
 chmod +x bench-network.sh
