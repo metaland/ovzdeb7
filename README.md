@@ -32,4 +32,4 @@ speedtest-cli (https://github.com/sivel/speedtest-cli)
 bench-network.sh
 user-login.sh
 user-limit.sh (non aktif)
-user-expire.sh
+user-expired.sh
