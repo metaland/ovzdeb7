@@ -1,4 +1,5 @@
 #!/bin/sh
+
 # initialisasi var
 export DEBIAN_FRONTEND=noninteractive
 OS=`uname -m`;
