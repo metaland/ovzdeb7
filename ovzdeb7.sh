@@ -150,6 +150,17 @@ echo "/bin/false" >> /etc/shells
 service ssh restart
 service dropbear restart
 
+# dropbear 2014
+apt-get install zlib1g-dev
+wget https://matt.ucc.asn.au/dropbear/releases/dropbear-2014.63.tar.bz2
+bzip2 -cd dropbear-2014.63.tar.bz2  | tar xvf -
+cd dropbear-2014.63
+./configure
+make && make install
+mv /usr/sbin/dropbear /usr/sbin/dropbear1
+ln /usr/local/sbin/dropbear /usr/sbin/dropbear
+service dropbear restart
+
 # install vnstat gui
 cd /home/vps/public_html/
 wget http://www.sqweek.com/sqweek/files/vnstat_php_frontend-1.5.1.tar.gz
@@ -188,18 +199,22 @@ curl -L "https://raw.github.com/sivel/speedtest-cli/master/speedtest_cli.py" > s
 curl -L "https://raw.github.com/pixelb/ps_mem/master/ps_mem.py" > ps_mem.py
 wget -O bench-network.sh "https://raw.githubusercontent.com/metaland/ovzdeb7/master/bench-network.sh"
 wget -O limit.sh "https://raw.githubusercontent.com/metaland/ovzdeb7/master/limit.sh"
+wget -O dropmon.sh "https://raw.githubusercontent.com/metaland/ovzdeb7/master/dropmon.sh"
 curl https://raw.githubusercontent.com/metaland/ovzdeb7/master/user-login.sh > user-login.sh
-curl https://raw.githubusercontent.com/metaland/ovzdeb7/master/user-expire.sh > user-expire.sh
+curl https://raw.githubusercontent.com/metaland/ovzdeb7/master/user-expired.sh > user-expired.sh
+curl https://raw.githubusercontent.com/metaland/ovzdeb7/master/userexpired.sh > userexpired.sh
 curl https://raw.githubusercontent.com/metaland/ovzdeb7/master/user-limit.sh > user-limit.sh
-echo "0 0 * * * root /root/user-expire.sh" > /etc/cron.d/user-expire
+echo "0 0 * * * root /root/user-expired.sh" > /etc/cron.d/user-expire
 sed -i '$ i\screen -AmdS limit /root/limit.sh' /etc/rc.local
 chmod +x bench-network.sh
 chmod +x speedtest_cli.py
 chmod +x ps_mem.py
 chmod +x user-login.sh
-chmod +x user-expire.sh
+chmod +x user-expired.sh
+chmod +x userexpired.sh
 chmod +x user-limit.sh
 chmod +x limit.sh
+chmod +x dropmon.sh
 
 # finalisasi
 chown -R www-data:www-data /home/vps/public_html
