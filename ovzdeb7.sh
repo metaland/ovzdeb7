@@ -259,8 +259,10 @@ echo "./ps_mem.py"  | tee -a log-install.txt
 echo "./speedtest_cli.py --share"  | tee -a log-install.txt
 echo "./bench-network.sh"  | tee -a log-install.txt
 echo "./user-login.sh"  | tee -a log-install.txt
-echo "./user-expire.sh"  | tee -a log-install.txt
+echo "./user-expired.sh"  | tee -a log-install.txt
+echo "./userexpired.sh"  | tee -a log-install.txt
 echo "./user-limit.sh 2"  | tee -a log-install.txt
+echo "./dropmon.sh"  | tee -a log-install.txt
 echo ""  | tee -a log-install.txt
 echo "Account Default (utk SSH dan VPN)"  | tee -a log-install.txt
 echo "---------------"  | tee -a log-install.txt
