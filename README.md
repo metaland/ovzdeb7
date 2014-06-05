@@ -5,10 +5,10 @@ Deskripsi
 Service
 -------
 
-OpenSSH port 22, 80, 143
-Dropbear port 109, 110, 443
+OpenSSH port 22, 143
+Dropbear port 443
 OpenVPN port TCP 1194 (client config – http://[ip]/client.tar)
-Squid port 8080 (limit to IP VPS)
+Squid port 80, 8000, 8080 (limit to IP VPS)
 badvpn-udpgw port 7300
 
 Fitur
