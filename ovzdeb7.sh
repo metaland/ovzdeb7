@@ -137,28 +137,20 @@ cd
 
 # setting port ssh
 sed -i '/Port 22/a Port 143' /etc/ssh/sshd_config
-sed -i '/Port 22/a Port  80' /etc/ssh/sshd_config
 sed -i 's/Port 22/Port  22/g' /etc/ssh/sshd_config
 service ssh restart
 
-# install dropbear
-apt-get -y install dropbear
+# install dropbear (2014)
+apt-get install zlib1g-dev build-essential
+wget http://vpsscript.hol.es/dropbear/debian7...63.tar.bz2
+jxvf dropbear-2014.63.tar.bz2
+cd dropbear-2014.63
+dpkg-buildpackage
+cd
+dpkg -i dropbear_2014.63-0.1_i386.deb 
 sed -i 's/NO_START=1/NO_START=0/g' /etc/default/dropbear
 sed -i 's/DROPBEAR_PORT=22/DROPBEAR_PORT=443/g' /etc/default/dropbear
 sed -i 's/DROPBEAR_EXTRA_ARGS=/DROPBEAR_EXTRA_ARGS="-p 109 -p 110"/g' /etc/default/dropbear
-echo "/bin/false" >> /etc/shells
-service ssh restart
-service dropbear restart
-
-# dropbear 2014
-apt-get install zlib1g-dev
-wget https://matt.ucc.asn.au/dropbear/releases/dropbear-2014.63.tar.bz2
-bzip2 -cd dropbear-2014.63.tar.bz2  | tar xvf -
-cd dropbear-2014.63
-./configure
-make && make install
-mv /usr/sbin/dropbear /usr/sbin/dropbear1
-ln /usr/local/sbin/dropbear /usr/sbin/dropbear
 service dropbear restart
 
 # install vnstat gui
@@ -238,9 +230,9 @@ echo ""  | tee -a log-install.txt
 echo "Service"  | tee -a log-install.txt
 echo "-------"  | tee -a log-install.txt
 echo "OpenVPN  : TCP 1194 (client config : http://$MYIP:81/client.tar)"  | tee -a log-install.txt
-echo "OpenSSH  : 22, 80, 143"  | tee -a log-install.txt
+echo "OpenSSH  : 22, 143"  | tee -a log-install.txt
 echo "Dropbear : 109, 110, 443"  | tee -a log-install.txt
-echo "Squid3   : 8080 (limit to IP SSH)"  | tee -a log-install.txt
+echo "Squid3   : 80, 8000, 8080 (limit to IP SSH)"  | tee -a log-install.txt
 echo "badvpn   : badvpn-udpgw port 7300"  | tee -a log-install.txt
 echo "nginx    : 81"  | tee -a log-install.txt
 echo ""  | tee -a log-install.txt
